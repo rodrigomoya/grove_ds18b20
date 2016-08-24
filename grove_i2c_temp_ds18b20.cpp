@@ -37,13 +37,14 @@ GroveI2CTempDs18b20::GroveI2CTempDs18b20(int pinsda, int pinscl)
     suli_i2c_init(i2c, pinsda, pinscl);
 
 	OneWire oneWire(ONE_WIRE_BUS);
-	DallasTemperature sensors(&oneWire);
+	
 	sensors.begin();
 
 }
 
 bool GroveI2CTempDs18b20::read_temperature(float *temperature)
 {
+	DallasTemperature sensors(&oneWire);
 	sensors.requestTemperatures();		
 	*temperature = sensors.getTempCByIndex(0);
 
