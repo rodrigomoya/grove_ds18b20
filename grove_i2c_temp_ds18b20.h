@@ -55,7 +55,7 @@ public:
 private:
     I2C_T *i2c;
     OneWire oneWire(ONE_WIRE_BUS);
-    DallasTemperature sensors(&oneWire);
+    DallasTemperature sensors(oneWire);
 };
 
 #endif
