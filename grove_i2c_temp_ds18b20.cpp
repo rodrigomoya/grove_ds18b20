@@ -28,24 +28,24 @@
 
 #include "suli2.h"
 #include "grove_i2c_temp_ds18b20.h" 
-
-
-/*comment*/
+#include "OneWire.h"
+#include "DallasTemperature.h"
 
 GroveI2CTempDs18b20::GroveI2CTempDs18b20(int pinsda, int pinscl)
 {
     this->i2c = (I2C_T *)malloc(sizeof(I2C_T));
     suli_i2c_init(i2c, pinsda, pinscl);
 
-    Wire.begin();
+	OneWire oneWire(ONE_WIRE_BUS);
+	DallasTemperature sensors(&oneWire);
+	sensors.begin();
+
 }
 
 bool GroveI2CTempDs18b20::read_temperature(float *temperature)
 {
+	sensors.requestTemperatures();		
+	*temperature = sensors.getTempCByIndex(0);
 
-}
-
-bool GroveI2CTempDs18b20::read_humidity(float *humidity)
-{
-
+    return true;
 }

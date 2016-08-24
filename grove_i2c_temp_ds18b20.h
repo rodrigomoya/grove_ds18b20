@@ -41,12 +41,13 @@
 //ADDED_AT          "2016-08-24"
 //AUTHOR            "Rodrigo Moya Toro - rodrigo@rizoma.io"
 
+#define ONE_WIRE_BUS 2
+
 class GroveI2CTempDs18b20
 {
 public:
     GroveI2CTempDs18b20(int pinsda, int pinscl);
     bool read_temperature(float *temperature);
-    bool read_humidity(float *humidity);
 
 private:
     I2C_T *i2c;
