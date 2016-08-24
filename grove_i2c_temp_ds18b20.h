@@ -31,6 +31,9 @@
 #define __GROVE_I2C_TEMP_DS18B20_H__
 
 #include "suli2.h"
+#include "OneWire.h"
+#include "DallasTemperature.h"
+
 
 //GROVE_NAME        "Grove - I2C Temp (DS18B20)"
 //SKU               101020112396122
@@ -51,6 +54,8 @@ public:
 
 private:
     I2C_T *i2c;
+    OneWire oneWire(ONE_WIRE_BUS);
+    DallasTemperature sensors(&oneWire);
 };
 
 #endif
