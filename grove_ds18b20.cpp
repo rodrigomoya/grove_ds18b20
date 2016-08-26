@@ -1,0 +1,123 @@
+/*
+ * grove_ds18b20.cpp
+ *
+ * Copyright (c) 2012 seeed technology inc.
+ * Website    :  www.seeed.cc
+ * Author     :  Kai
+ *
+ * The MIT License (MIT)
+ *
+ * Permission is hereby granted, free of charge, to any person obtaining a copy
+ * of this software and associated documentation files (the "Software"), to deal
+ * in the Software without restriction, including without limitation the rights
+ * to use, copy, modify, merge, publish, distribute, sublicense, and/or sell
+ * copies of the Software, and to permit persons to whom the Software is
+ * furnished to do so, subject to the following conditions:
+ *
+ * The above copyright notice and this permission notice shall be included in
+ * all copies or substantial portions of the Software.
+ *
+ * THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
+ * IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
+ * FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE
+ * AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER
+ * LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
+ * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
+ * THE SOFTWARE.
+ */
+
+#include "grove_ds18b20.h"
+#include <OneWire.h>
+#include <DallasTemperature.h>
+
+#ifndef ENABLE_DEBUG_ON_UART1
+#define ENABLE_DEBUG_ON_UART1      1
+#endif
+
+#define ONE_WIRE_BUS 12  // DS18B20 on Digital Port 1 = pin 12 look at http://www.seeedstudio.com/wiki/Wio_Link
+
+OneWire oneWire(ONE_WIRE_BUS);
+DallasTemperature DS18B20(&oneWire);
+
+GroveDs18b20::GroveDs18b20(int pin)
+{
+
+#ifdef ENABLE_DEBUG_ON_UART1
+    Serial1.println("Hello ds18b20!!!");    
+    byte i;
+    byte addr[8];
+
+    if ( !oneWire.search(addr)) {
+      Serial1.print("no addresses found\n");
+      oneWire.reset_search();
+      return;
+    }
+ 
+    Serial1.print("R=");
+    for( i = 0; i < 8; i++) {
+      Serial1.print(addr[i], HEX);
+      Serial1.print(" ");
+    }
+ 
+    if ( OneWire::crc8( addr, 7) != addr[7]) {
+      Serial1.print("bad CRC!\n");
+      return;
+    }
+ 
+    if ( addr[0] == 0x10) {
+      Serial1.print("device is DS18S20 family\n");
+    }
+    else if ( addr[0] == 0x28) {
+      Serial1.print("device is DS18B20 family\n");
+    }
+    else {
+      Serial1.print("device not recognized : 0x");
+      Serial1.println(addr[0],HEX);
+      return;
+    }
+#endif
+
+    DS18B20.begin();/* Inizialisieren der Dallas Temperature library */
+
+}
+
+/* read count of devices */
+bool GroveDs18b20::read_device_count(uint8_t *count)
+{
+    *count = DS18B20.getDeviceCount();
+
+    return true;
+}
+
+/* read temperature of first device in Celsius */
+bool GroveDs18b20::read_temperature_C(uint8_t index, float *temperature)
+{
+    
+    DS18B20.requestTemperatures(); // Temp abfragen
+
+    if (index < 1 || index > DS18B20.getDeviceCount())
+    {
+        error_desc = "there is no device with this device number";
+        return false;
+    }
+
+    *temperature = DS18B20.getTempCByIndex(index - 1);
+
+    return true;
+}
+
+/* read temperature of first device in Fahrenheit */
+bool GroveDs18b20::read_temperature_F(uint8_t index, float *temperature)
+{
+    
+    DS18B20.requestTemperatures(); // Temp abfragen
+    
+    if (index < 1 || index > DS18B20.getDeviceCount())
+    {
+        error_desc = "there is no device with this device number";
+        return false;
+    }
+
+    *temperature = DS18B20.getTempFByIndex(index - 1);
+    return true;
+}

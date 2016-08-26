@@ -1,9 +1,9 @@
 /*
- * grove_i2c_temp_ds18b20.h
+ * grove_ds18b20.h
  *
  * Copyright (c) 2012 seeed technology inc.
  * Website    : www.seeed.cc
- * Author     : Lambor, Jack
+ * Author     : Kai 
  *
  * The MIT License (MIT)
  *
@@ -27,35 +27,57 @@
  */
 
 
-#ifndef __GROVE_I2C_TEMP_DS18B20_H__
-#define __GROVE_I2C_TEMP_DS18B20_H__
+#ifndef __GROVE_DS18B20_H__
+#define __GROVE_DS18B20_H__
 
 #include "suli2.h"
-#include "OneWire.h"
-#include "DallasTemperature.h"
+
+//GROVE_NAME        "Grove_ds18b20"
+//SKU               0497dd7c-2faf-4ccb-900d-9a8f3b099fed 
+//IF_TYPE           GPIO
+//IMAGE_URL         http://i.imgur.com/McTQZjy.jpg 
 
 
-//GROVE_NAME        "Grove - I2C Temp (DS18B20)"
-//SKU               101020112396122
-//IF_TYPE           I2C
-//IMAGE_URL         https://statics3.seeedstudio.com/images/product/onewiretempsensor.jpg
-//DESCRIPTION       "Driver for DS18B20 de SeeedStudio"
-//WIKI_URL          http://www.rizoma.io
-//ADDED_AT          "2016-08-24"
-//AUTHOR            "Rodrigo Moya Toro - rodrigo@rizoma.io"
-
-#define ONE_WIRE_BUS 2
-
-class GroveI2CTempDs18b20
+class GroveDs18b20
 {
 public:
-    GroveI2CTempDs18b20(int pinsda, int pinscl);
-    bool read_temperature(float *temperature);
+    GroveDs18b20(int pin);
+    
+    /**
+     * get the number of devices at the bus 
+     * 
+     * @param device_count - count of devices  
+     * 
+     * @return bool 
+     */
+    bool read_device_count(uint8_t *device_count);
+
+    /**
+     * read the temperature of device with number device_index 
+     * 
+     * @param device_index - number of device to read from (1~n) 
+     * @param celsius_degree - unit: Celsius degree 
+     * 
+     * @return bool 
+     */
+    bool read_temperature_C(uint8_t device_index, float *celsius_degree);
+
+    /**
+     * read the temperature of device with number device_index 
+     * 
+     * @param device_count - number of device to read from (1~n) 
+     * @param fahrenheit_degree - unit: Fahrenheit degree 
+     * 
+     * @return bool 
+     */
+    bool read_temperature_F(uint8_t device_index, float *fahrenheit_degree);
+
+    char *get_last_error() { return error_desc; };
 
 private:
-    I2C_T *i2c;
-    OneWire oneWire(ONE_WIRE_BUS);
-    DallasTemperature sensors(oneWire);
+    char *error_desc;
+
 };
+
 
 #endif
