@@ -30,55 +30,14 @@
 #include <OneWire.h>
 #include <DallasTemperature.h>
 
-#ifndef ENABLE_DEBUG_ON_UART1
-#define ENABLE_DEBUG_ON_UART1      1
-#endif
-
-#define ONE_WIRE_BUS 12  // DS18B20 on Digital Port 1 = pin 12 look at http://www.seeedstudio.com/wiki/Wio_Link
+#define ONE_WIRE_BUS 5  // DS18B20 on Digital Port 1 = pin 12 look at http://www.seeedstudio.com/wiki/Wio_Link
 
 OneWire oneWire(ONE_WIRE_BUS);
 DallasTemperature DS18B20(&oneWire);
 
 GroveDs18b20::GroveDs18b20(int pin)
 {
-
-#ifdef ENABLE_DEBUG_ON_UART1
-    Serial1.println("Hello ds18b20!!!");    
-    byte i;
-    byte addr[8];
-
-    if ( !oneWire.search(addr)) {
-      Serial1.print("no addresses found\n");
-      oneWire.reset_search();
-      return;
-    }
- 
-    Serial1.print("R=");
-    for( i = 0; i < 8; i++) {
-      Serial1.print(addr[i], HEX);
-      Serial1.print(" ");
-    }
- 
-    if ( OneWire::crc8( addr, 7) != addr[7]) {
-      Serial1.print("bad CRC!\n");
-      return;
-    }
- 
-    if ( addr[0] == 0x10) {
-      Serial1.print("device is DS18S20 family\n");
-    }
-    else if ( addr[0] == 0x28) {
-      Serial1.print("device is DS18B20 family\n");
-    }
-    else {
-      Serial1.print("device not recognized : 0x");
-      Serial1.println(addr[0],HEX);
-      return;
-    }
-#endif
-
     DS18B20.begin();/* Inizialisieren der Dallas Temperature library */
-
 }
 
 /* read count of devices */
@@ -90,7 +49,7 @@ bool GroveDs18b20::read_device_count(uint8_t *count)
 }
 
 /* read temperature of first device in Celsius */
-bool GroveDs18b20::read_temperature_C(uint8_t index, float *temperature)
+bool GroveDs18b20::read_temperature(uint8_t index, float *temperature)
 {
     
     DS18B20.requestTemperatures(); // Temp abfragen
@@ -103,21 +62,5 @@ bool GroveDs18b20::read_temperature_C(uint8_t index, float *temperature)
 
     *temperature = DS18B20.getTempCByIndex(index - 1);
 
-    return true;
-}
-
-/* read temperature of first device in Fahrenheit */
-bool GroveDs18b20::read_temperature_F(uint8_t index, float *temperature)
-{
-    
-    DS18B20.requestTemperatures(); // Temp abfragen
-    
-    if (index < 1 || index > DS18B20.getDeviceCount())
-    {
-        error_desc = "there is no device with this device number";
-        return false;
-    }
-
-    *temperature = DS18B20.getTempFByIndex(index - 1);
     return true;
 }

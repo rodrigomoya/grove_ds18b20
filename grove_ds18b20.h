@@ -36,7 +36,10 @@
 //SKU               0497dd7c-2faf-4ccb-900d-9a8f3b099fed 
 //IF_TYPE           GPIO
 //IMAGE_URL         http://i.imgur.com/McTQZjy.jpg 
-
+//DESCRIPTION       "DS18b20"
+//WIKI_URL          https://github.com/Seeed-Studio/Grove_Drivers_for_Wio/wiki/Grove_Generic_Digital_In
+//ADDED_AT          "2015-12-01"
+//AUTHOR            "SEEED"
 
 class GroveDs18b20
 {
@@ -55,22 +58,12 @@ public:
     /**
      * read the temperature of device with number device_index 
      * 
-     * @param device_index - number of device to read from (1~n) 
-     * @param celsius_degree - unit: Celsius degree 
-     * 
-     * @return bool 
-     */
-    bool read_temperature_C(uint8_t device_index, float *celsius_degree);
-
-    /**
-     * read the temperature of device with number device_index 
-     * 
      * @param device_count - number of device to read from (1~n) 
      * @param fahrenheit_degree - unit: Fahrenheit degree 
      * 
      * @return bool 
      */
-    bool read_temperature_F(uint8_t device_index, float *fahrenheit_degree);
+    bool read_temperature(uint8_t device_index, float *fahrenheit_degree);
 
     char *get_last_error() { return error_desc; };
 
