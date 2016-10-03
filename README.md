@@ -1,2 +1,2 @@
-# grove_i2c_temp_humi_hdc1000
-grove_i2c_temp_humi_hdc1000
+# grove ds18b20
+WioLink / WioNode DS18B20 Temperature Sensor Firmware
