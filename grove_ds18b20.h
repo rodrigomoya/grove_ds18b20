@@ -1,9 +1,8 @@
 /*
  * grove_ds18b20.h
  *
- * Copyright (c) 2012 seeed technology inc.
- * Website    : www.seeed.cc
- * Author     : Kai 
+ * Website    : www.rizoma.io
+ * Author     : Rodrigo Moya (rodrigo@rizoma.io)
  *
  * The MIT License (MIT)
  *
@@ -38,8 +37,8 @@
 //IMAGE_URL         http://i.imgur.com/McTQZjy.jpg 
 //DESCRIPTION       "DS18b20"
 //WIKI_URL          https://github.com/Seeed-Studio/Grove_Drivers_for_Wio/wiki/Grove_Generic_Digital_In
-//ADDED_AT          "2015-12-01"
-//AUTHOR            "SEEED"
+//ADDED_AT          "2016-08-01"
+//AUTHOR            "Rodrigo Moya"
 
 class GroveDs18b20
 {

@@ -1,9 +1,8 @@
 /*
  * grove_ds18b20.cpp
  *
- * Copyright (c) 2012 seeed technology inc.
- * Website    :  www.seeed.cc
- * Author     :  Kai
+ * Website    : www.rizoma.io
+ * Author     : Rodrigo Moya (rodrigo@rizoma.io)
  *
  * The MIT License (MIT)
  *
